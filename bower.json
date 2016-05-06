@@ -1,0 +1,24 @@
+{
+  "name": "gb",
+  "description": "",
+  "main": "webpack.config.js",
+  "authors": [
+    "SergNikolaev <iintersergey@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/qvantor/GB",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "examples/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.6",
+    "d3": "^3.5.17",
+    "three.js": "threejs#*",
+    "vue": "^1.0.21"
+  }
+}

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Editor</title>
+    <script src="bower/d3/d3.js"></script>
+    <script src="bower/three.js/build/three.js"></script>
+    <script src="bower/three.js/examples/js/controls/OrbitControls.js"></script>
+    <script src="bower/three.js/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="bower/three.js/examples/js/postprocessing/MaskPass.js"></script>
+    <script src="bower/three.js/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="bower/three.js/examples/js/postprocessing/ShaderPass.js"></script>
+    <script src="bower/three.js/examples/js/postprocessing/BloomPass.js"></script>
+    <script src="bower/three.js/examples/js/shaders/CopyShader.js"></script>
+    <script src="bower/three.js/examples/js/shaders/CopyShader.js"></script>
+    <script src="bower/three.js/examples/js/shaders/ConvolutionShader.js"></script>
+    <script src="bower/three.js/examples/js/shaders/FXAAShader.js"></script>
+    <script src="../build/GB.js"></script>
+
+    <script src="bower/vue/dist/vue.js"></script>
+    <script src="bower/jquery/dist/jquery.js"></script>
+    <script src="bower/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="scripts/editor.js"></script>
+
+
+    <link href="bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+</head>
+<body style="overflow-x: hidden">
+    <div class="row">
+        <div class="col-md-9" id="graph" style="height: 100vh; background: #363636;"></div>
+        <div class="col-md-3" id="editor" style="padding: 20px;">
+
+            <h4>Add Node</h4>
+
+            <div class="row">
+                <div class="col-xs-8">
+                    <div class="input-group">
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">{{nodeType || 'NodeType'}} <span
+                                    class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu" style="min-width: 70px; width: 70px">
+                                <li v-for="node in nodeTypes" v-on:click="nodeType = $key"><a><img style="width: 100%"
+                                                                                                   v-bind:src="node.texture"></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <input type="text" class="form-control" v-model="nodeText" placeholder="Node text here...">
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <button type="button" class="btn btn-default" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" v-on:click="addNode">
+                        Add Node
+                    </button>
+                </div>
+            </div>
+
+            <h4>Add Link</h4>
+
+            <div class="row">
+                <div class="col-xs-4">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            {{link.source !== null ? link.source : 'Source'}} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li v-for="node in nodes" v-on:click="link.source = node.id"><a>ID:{{node.id}}, TEXT:
+                                {{node.data.text}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            {{link.target !== null ? link.target : 'Target'}} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li v-for="node in nodes" v-on:click="link.target = node.id"><a>ID:{{node.id}}, TEXT:
+                                {{node.data.text}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <button type="button" class="btn btn-default" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" v-on:click="addLink">
+                        Add Link
+                    </button>
+                </div>
+            </div>
+
+            <h4>Global Events</h4>
+            <p>You can also add any of this events on each node type</p>
+            <div class="row">
+                <div class="col-xs-4">
+                    <b>Click:</b>
+                </div>
+                <div class="col-xs-8">
+                    <textarea style="width: 100%" v-model="events.click"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <b>Right Click:</b>
+                </div>
+                <div class="col-xs-8">
+                    <textarea style="width: 100%" v-model="events.contextmenu"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <b>Mousemove:</b>
+                </div>
+                <div class="col-xs-8">
+                    <textarea style="width: 100%" v-model="events.mousemove"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <b>Mouseover:</b>
+                </div>
+                <div class="col-xs-8">
+                    <textarea style="width: 100%" v-model="events.mouseover"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4">
+                    <b>Mouseout:</b>
+                </div>
+                <div class="col-xs-8">
+                    <textarea style="width: 100%" v-model="events.mouseout"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
