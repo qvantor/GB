@@ -1,0 +1,17 @@
+{
+  "name": "gb",
+  "version": "0.0.1",
+  "description": "",
+  "main": "webpack.config.js",
+  "directories": {
+    "example": "examples"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "webpack": "^1.13.0"
+  }
+}
