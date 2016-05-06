@@ -13,7 +13,7 @@ module.exports = function (element) {
     this.renderer.autoClear = false;
 
     var renderModel = new THREE.RenderPass(this.scene, this.camera);
-    var effectBloom = new THREE.BloomPass(1);
+    var effectBloom = new THREE.BloomPass(.7);
     var effectCopy = new THREE.ShaderPass(THREE.CopyShader);
     var effectFXAA = new THREE.ShaderPass(THREE.FXAAShader);
     effectFXAA.uniforms['resolution'].value.set(1 / this.width, 1 / this.height);

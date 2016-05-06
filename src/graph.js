@@ -33,9 +33,12 @@ module.exports = function (cfg) {
         });
         s.model.data.links.forEach(function (item) {
             var obj = s.view.scene.getObjectById(item.linkId, true);
-            var a = new THREE.Vector3(countX(item.target.x), countY(item.target.y), 0);
-            var b = new THREE.Vector3(countX(item.source.x), countY(item.source.y), 0);
-            obj.setPos(a, b);
+            obj.geometry.vertices[0].x = countX(item.source.x);
+            obj.geometry.vertices[0].y = countY(item.source.y);
+
+            obj.geometry.vertices[1].x = countX(item.target.x);
+            obj.geometry.vertices[1].y = countY(item.target.y);
+            obj.geometry.verticesNeedUpdate = true;
         });
 
         s.view.raycaster.setFromCamera(s.view.mouse, s.view.camera);
