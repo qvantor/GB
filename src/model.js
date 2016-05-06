@@ -39,20 +39,28 @@ module.exports = function (data, s) {
         s.view.controls.dispatchEvent({type: 'change'});
         this.force.start();
     };
-    this.addLink = function (source, target, value) {
+    this.addLink = function (source, target, value, color) {
         for (var i = 0; i < this.data.links.length; i++) {
             if (this.data.links[i]['source'].id === source && this.data.links[i]['target'].id === target) {
                 return;
             }
         }
-        var arrowHelper = new THREE.CustomArrowHelper(new THREE.Vector3(100, 0, 0), new THREE.Vector3(0, 0, 0), 1, 0x85ceff);
-        s.view.links.add(arrowHelper);
+
+        var geometry = new THREE.Geometry();
+        geometry.vertices.push(
+            new THREE.Vector3(0, 0, 0),
+            new THREE.Vector3(1, 0, 0)
+        );
+        var line = new THREE.Line(geometry, new THREE.LineBasicMaterial({
+            color: color || 0x7f8c8d
+        }));
+        s.view.links.add(line);
 
         this.data.links.push({
             "source": this.findNode(source),
             "target": this.findNode(target),
             "value": value,
-            "linkId": arrowHelper.id
+            "linkId": line.id
         });
 
         this.force.start();

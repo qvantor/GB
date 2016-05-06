@@ -27,22 +27,37 @@
                 nodes: {
                     default: new GB.nodeType({
                         material: {
-                            texture: 'sprites/smartphone.png',
+                            texture: 'sprites/man.png',
                             scale: 8
                         }
                     })
                 }
             };
-            var graph = new GB.graph(config);
+            var graph = new GB.graph(config),
+                    first = Math.random();
+            graph.view.controls.minZoom = 0.1;
+            graph.view.camera.zoom = 0.1;
+            graph.view.camera.updateProjectionMatrix();
             graph.start();
+            graph.model.addNode(first, {}, 'default', true, {
+                x: graph.view.width / 2,
+                y: graph.view.height / 2
+            });
 
-            setInterval(function () {
+            for (var i = 0; i < 500; i++) {
                 graph.model.addNode(Math.random(), {}, 'default');
+            }
+
+            var interval = setInterval(function () {
+                if (graph.model.data.links.length === 500) {
+                    clearInterval(interval);
+                }
                 graph.model.addLink(
-                        graph.model.data.nodes[randomInteger(0, graph.model.data.nodes.length)],
-                        graph.model.data.nodes[randomInteger(0, graph.model.data.nodes.length)],
-                        1);
-            }, 300);
+                        graph.model.data.nodes[randomInteger(0, graph.model.data.nodes.length - 1)].id,
+                        graph.model.data.nodes[randomInteger(0, graph.model.data.nodes.length - 1)].id,
+                        1,
+                        0xf1c40f);
+            }, 100);
         }
         function randomInteger(min, max) {
             var r = min + Math.random() * (max - min)
@@ -50,8 +65,16 @@
             return r;
         }
     </script>
+    <style>
+        body {
+            color: #ffffff;
+            background-color: #1c1c1c;
+            margin: 0px;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
-<div id="container" style="width: 100%; height: 97vh"></div>
+<div id="container" style="width: 100%; height: 98vh"></div>
 </body>
 </html>
