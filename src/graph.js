@@ -4,8 +4,9 @@ module.exports = function (cfg) {
     var s = {
         start: start,
         view: new GB.view(cfg.element),
-        nodes: cfg.nodes,
+        nodes: new GB.nodeTypes(cfg.nodes),
         config: cfg.config || {},
+        globalEvents: cfg.events || {},
         intersect: {
             node: []
         },
@@ -15,7 +16,7 @@ module.exports = function (cfg) {
         }
     };
     s.model = new GB.model(null, s);
-    s.events = new GB.events(cfg.element, s, cfg.events);
+    s.events = new GB.events(cfg.element, s);
 
     function start() {
         requestAnimationFrame(start);
@@ -39,6 +40,7 @@ module.exports = function (cfg) {
             obj.geometry.vertices[1].x = countX(item.target.x);
             obj.geometry.vertices[1].y = countY(item.target.y);
             obj.geometry.verticesNeedUpdate = true;
+            obj.geometry.computeBoundingSphere();
         });
 
         s.view.raycaster.setFromCamera(s.view.mouse, s.view.camera);

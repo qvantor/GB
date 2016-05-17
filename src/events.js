@@ -1,4 +1,4 @@
-module.exports = function (element, s, events) {
+module.exports = function (element, s) {
     var overElement;
 
     this.mouseMove = function (e) {
@@ -101,12 +101,12 @@ module.exports = function (element, s, events) {
         s.view.camera.updateProjectionMatrix();
     };
 
-    function emitGlobalEvent(e, eName, d, s) {
-        if (events && events[eName]) {
-            if (d && s) {
-                events[eName](e, d, s);
+    function emitGlobalEvent(e, eName, data, sprite) {
+        if (s.globalEvents && s.globalEvents[eName]) {
+            if (data && sprite) {
+                s.globalEvents[eName](e, data, sprite);
             } else {
-                events[eName](e);
+                s.globalEvents[eName](e);
             }
         }
     }
