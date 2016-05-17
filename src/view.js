@@ -1,6 +1,7 @@
 module.exports = function (element) {
-    this.width = element.clientWidth;
-    this.height = element.clientHeight;
+    console.log(element);
+    this.width = element.offsetWidth;
+    this.height = element.offsetHeight;
     this.scene = new THREE.Scene();
     this.camera = new THREE.OrthographicCamera(-this.width / 2, this.width / 2, this.height / 2, -this.height / 2, 0, 15);
     this.camera.position.z = 10;
