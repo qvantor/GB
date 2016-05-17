@@ -1,5 +1,4 @@
 module.exports = function (element) {
-    console.log(element);
     this.width = element.offsetWidth;
     this.height = element.offsetHeight;
     this.scene = new THREE.Scene();
