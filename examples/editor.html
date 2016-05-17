@@ -26,114 +26,222 @@
     <link href="bower/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
 </head>
 <body style="overflow-x: hidden">
-    <div class="row">
-        <div class="col-md-9" id="graph" style="height: 100vh; background: #363636;"></div>
-        <div class="col-md-3" id="editor" style="height: 100vh; background: #FFF;">
+<div id="graph" style="height: 70vh; width: 100%; background: #363636;"></div>
+<div class="container-fluid">
+    <div id="editor" style="position: fixed; bottom: 0px; left: 0px; height: 29vh; background: #fff;">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#data" aria-controls="data" role="tab" data-toggle="tab">Data</a></li>
+            <li role="presentation">
+                <a href="#events" aria-controls="events" role="tab" data-toggle="tab">Events</a>
+            </li>
+        </ul>
 
-            <h4>Add Node</h4>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="data">
+                <div class="row" style="padding: 10px">
+                    <div class="col-xs-3">
+                        <h4>Add Node</h4>
 
-            <div class="row">
-                <div class="col-xs-8">
-                    <div class="input-group">
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">{{nodeType || 'NodeType'}} <span
-                                    class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" style="min-width: 70px; width: 70px">
-                                <li v-for="node in nodeTypes" v-on:click="nodeType = $key"><a><img style="width: 100%"
-                                                                                                   v-bind:src="node.texture"></a>
-                                </li>
-                            </ul>
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">{{nodeType ||
+                                            'NodeType'}} <span
+                                                    class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" style="min-width: 70px; width: 70px">
+                                            <li v-for="node in nodeTypes" v-on:click="nodeType = $key"><a><img
+                                                    style="width: 100%"
+                                                    v-bind:src="node.texture"></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <input type="text" class="form-control" v-model="nodeText"
+                                           placeholder="Node text here...">
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-default" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false" v-on:click="addNode">
+                                    Add Node
+                                </button>
+                            </div>
                         </div>
-                        <input type="text" class="form-control" v-model="nodeText" placeholder="Node text here...">
+                    </div>
+                    <div class="col-xs-3">
+                        <h4>Add Link</h4>
+
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                        {{link.source !== null ? link.source : 'Source'}} <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li v-for="node in nodes" v-on:click="link.source = node.id"><a>ID:{{node.id}},
+                                            TEXT:
+                                            {{node.data.text}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                        {{link.target !== null ? link.target : 'Target'}} <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li v-for="node in nodes" v-on:click="link.target = node.id"><a>ID:{{node.id}},
+                                            TEXT:
+                                            {{node.data.text}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-default" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false" v-on:click="addLink">
+                                    Add Link
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-xs-4">
-                    <button type="button" class="btn btn-default" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false" v-on:click="addNode">
-                        Add Node
-                    </button>
-                </div>
             </div>
+            <div role="tabpanel" class="tab-pane" id="events">
+                <div class="row" style="padding: 10px">
+                    <div class="col-xs-3">
+                        <h4>Global Events</h4>
+                        <p>You can also add any of this events on each node type</p>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <b>Click:</b>
+                            </div>
+                            <div class="col-xs-8">
+                                <textarea style="width: 100%" v-model="events.click"></textarea>
+                            </div>
+                        </div>
 
-            <h4>Add Link</h4>
+                    </div>
+                    <div class="col-xs-3">
+                        <h4>Add Node</h4>
 
-            <div class="row">
-                <div class="col-xs-4">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                            {{link.source !== null ? link.source : 'Source'}} <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li v-for="node in nodes" v-on:click="link.source = node.id"><a>ID:{{node.id}}, TEXT:
-                                {{node.data.text}}</a></li>
-                        </ul>
+                        <div class="row">
+                            <div class="col-xs-8">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle"
+                                                data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false">{{nodeType ||
+                                            'NodeType'}} <span
+                                                    class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" style="min-width: 70px; width: 70px">
+                                            <li v-for="node in nodeTypes" v-on:click="nodeType = $key"><a><img
+                                                    style="width: 100%"
+                                                    v-bind:src="node.texture"></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <input type="text" class="form-control" v-model="nodeText"
+                                           placeholder="Node text here...">
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-default" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false" v-on:click="addNode">
+                                    Add Node
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <h4>Add Link</h4>
+
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                        {{link.source !== null ? link.source : 'Source'}} <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li v-for="node in nodes" v-on:click="link.source = node.id"><a>ID:{{node.id}},
+                                            TEXT:
+                                            {{node.data.text}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                        {{link.target !== null ? link.target : 'Target'}} <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li v-for="node in nodes" v-on:click="link.target = node.id"><a>ID:{{node.id}},
+                                            TEXT:
+                                            {{node.data.text}}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-xs-4">
+                                <button type="button" class="btn btn-default" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false" v-on:click="addLink">
+                                    Add Link
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-xs-4">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
-                            {{link.target !== null ? link.target : 'Target'}} <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li v-for="node in nodes" v-on:click="link.target = node.id"><a>ID:{{node.id}}, TEXT:
-                                {{node.data.text}}</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-xs-4">
-                    <button type="button" class="btn btn-default" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false" v-on:click="addLink">
-                        Add Link
-                    </button>
-                </div>
             </div>
+            <!--<div role="tabpanel" class="tab-pane" id="events">-->
+            <!--<div class="row" style="padding: 10px">-->
+            <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="col-xs-4">&ndash;&gt;-->
+            <!--&lt;!&ndash;<b>Mouseover:</b>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="col-xs-8">&ndash;&gt;-->
+            <!--&lt;!&ndash;<textarea style="width: 100%" v-model="events.mouseover"></textarea>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="row">&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="col-xs-4">&ndash;&gt;-->
+            <!--&lt;!&ndash;<b>Mouseout:</b>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;<div class="col-xs-8">&ndash;&gt;-->
+            <!--&lt;!&ndash;<textarea style="width: 100%" v-model="events.mouseout"></textarea>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--<div class="col-xs-4">-->
+            <!--<h4>Global Events</h4>-->
 
-            <h4>Global Events</h4>
-            <p>You can also add any of this events on each node type</p>
-            <div class="row">
-                <div class="col-xs-4">
-                    <b>Click:</b>
-                </div>
-                <div class="col-xs-8">
-                    <textarea style="width: 100%" v-model="events.click"></textarea>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-4">
-                    <b>Right Click:</b>
-                </div>
-                <div class="col-xs-8">
-                    <textarea style="width: 100%" v-model="events.contextmenu"></textarea>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-4">
-                    <b>Mousemove:</b>
-                </div>
-                <div class="col-xs-8">
-                    <textarea style="width: 100%" v-model="events.mousemove"></textarea>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-4">
-                    <b>Mouseover:</b>
-                </div>
-                <div class="col-xs-8">
-                    <textarea style="width: 100%" v-model="events.mouseover"></textarea>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-4">
-                    <b>Mouseout:</b>
-                </div>
-                <div class="col-xs-8">
-                    <textarea style="width: 100%" v-model="events.mouseout"></textarea>
-                </div>
-            </div>
+            <!--<p>You can also add any of this events on each node type</p>-->
+            <!--</div>-->
+            <!--<div class="col-xs-4">-->
+            <!--<div class="col-xs-3">-->
+            <!--<b>Click:</b>-->
+            <!--</div>-->
+            <!--<div class="col-xs-8">-->
+            <!--<textarea style="width: 100%" v-model="events.click"></textarea>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div class="col-xs-4">-->
+            <!--<div class="col-xs-3">-->
+            <!--<b>Right Click:</b>-->
+            <!--</div>-->
+            <!--<div class="col-xs-8">-->
+            <!--<textarea style="width: 100%" v-model="events.contextmenu"></textarea>-->
+            <!--</div>-->
+            <!--</div>-->
+
+            <!--</div>-->
+            <!--</div>-->
         </div>
     </div>
 </div>
